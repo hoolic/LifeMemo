@@ -254,7 +254,7 @@ t1TextView.setOnClickListener(new OnClickListener() {
 		
         }
 		
-		 T.showShort(addActivity.this, "����ɹ�");
+		 T.showShort(addActivity.this, "SAVED");
 		 finish();
 		
 	}
