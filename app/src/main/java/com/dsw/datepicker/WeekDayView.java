@@ -10,15 +10,15 @@ import android.util.DisplayMetrics;
 import android.view.View;
 
 public class WeekDayView extends View {
-	//上横线颜色
+	//color of the upper line
 	private int mTopLineColor = Color.parseColor("#CCE4F2");
-	//下横线颜色
+	//color of the bottom line
 	private int mBottomLineColor = Color.parseColor("#CCE4F2");
-	//周一到周五的颜色
+	//color from monday to frdiay
 	private int mWeedayColor = Color.parseColor("#1FC2F3");
-	//周六、周日的颜色
+	//color for saturday and sunday
 	private int mWeekendColor = Color.parseColor("#fa4451");
-	//线的宽度
+	//width of the line
 	private int mStrokeWidth = 4;
 	private int mWeekSize = 14;
 	private Paint paint;
@@ -51,13 +51,13 @@ public class WeekDayView extends View {
 	protected void onDraw(Canvas canvas) {
 		int width = getWidth();
 		int height = getHeight();
-		//进行画上下线
+		//start to draw upp and bottom line
 		paint.setStyle(Style.STROKE);
 		paint.setColor(mTopLineColor);
 		paint.setStrokeWidth(mStrokeWidth);
 		canvas.drawLine(0, 0, width, 0, paint);
 		
-		//画下横线
+		//draw the bottom line
 		paint.setColor(mBottomLineColor);
 		canvas.drawLine(0, height, width, height, paint);
 		paint.setStyle(Style.FILL);
@@ -68,7 +68,7 @@ public class WeekDayView extends View {
 			int fontWidth = (int) paint.measureText(text);
 			int startX = columnWidth * i + (columnWidth - fontWidth)/2;
 			int startY = (int) (height/2 - (paint.ascent() + paint.descent())/2);
-			if(text.indexOf("日") > -1|| text.indexOf("六") > -1){
+			if(text.indexOf("SUN") > -1|| text.indexOf("SAT") > -1){
 				paint.setColor(mWeekendColor);
 			}else{
 				paint.setColor(mWeedayColor);
@@ -78,7 +78,7 @@ public class WeekDayView extends View {
 	}
 
 	/**
-	 * 设置顶线的颜色
+	 * Set upper line color
 	 * @param mTopLineColor
 	 */
 	public void setmTopLineColor(int mTopLineColor) {
@@ -86,7 +86,7 @@ public class WeekDayView extends View {
 	}
 
 	/**
-	 * 设置底线的颜色
+	 * set bottom line color
 	 * @param mBottomLineColor
 	 */
 	public void setmBottomLineColor(int mBottomLineColor) {
@@ -94,7 +94,7 @@ public class WeekDayView extends View {
 	}
 
 	/**
-	 * 设置周一-五的颜色
+	 * set color for monday through friday
 	 * @return
 	 */
 	public void setmWeedayColor(int mWeedayColor) {
@@ -102,7 +102,7 @@ public class WeekDayView extends View {
 	}
 
 	/**
-	 * 设置周六、周日的颜色
+	 * set color for saturday and sunday
 	 * @param mWeekendColor
 	 */
 	public void setmWeekendColor(int mWeekendColor) {
@@ -110,7 +110,7 @@ public class WeekDayView extends View {
 	}
 
 	/**
-	 * 设置边线的宽度
+	 * set the width of the line
 	 * @param mStrokeWidth
 	 */
 	public void setmStrokeWidth(int mStrokeWidth) {
@@ -119,7 +119,7 @@ public class WeekDayView extends View {
 
 
 	/**
-	 * 设置字体的大小
+	 * set the size of the text
 	 * @param mWeekSize
 	 */
 	public void setmWeekSize(int mWeekSize) {
@@ -128,9 +128,8 @@ public class WeekDayView extends View {
 
 
 	/**
-	 * 设置星期的形式
+	 * set the form of calendar
 	 * @param weekString
-	 * 默认值	"日","一","二","三","四","五","六"
 	 */
 	public void setWeekString(String[] weekString) {
 		this.weekString = weekString;
