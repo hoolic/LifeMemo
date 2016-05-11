@@ -6,7 +6,7 @@ import android.util.Log;
 
 public class DateUtils {
 	/**
-     * 通过年份和月份 得到当月的日子
+     * get date from year and month
      * 
      * @param year
      * @param month
@@ -39,13 +39,12 @@ public class DateUtils {
 		}
     }
     /**
-     * 返回当前月份1号位于周几
+     * get the first day of week
      * @param year
-     * 		年份
+     * 		year
      * @param month
-     * 		月份，传入系统获取的，不需要正常的
      * @return
-     * 	日：1		一：2		二：3		三：4		四：5		五：6		六：7
+     * 	Sunday：1		monday：2		Tuesday：3		wednesday：4		thurday：5		friday：6		saturday：7
      */
     public static int getFirstDayWeek(int year, int month){
     	Calendar calendar = Calendar.getInstance();
