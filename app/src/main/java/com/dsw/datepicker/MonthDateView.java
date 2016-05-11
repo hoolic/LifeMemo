@@ -60,7 +60,7 @@ public class MonthDateView extends View {
 		String dayString;
 		int mMonthDays = DateUtils.getMonthDays(mSelYear, mSelMonth);
 		int weekNumber = DateUtils.getFirstDayWeek(mSelYear, mSelMonth);
-		Log.d("DateView", "DateView:" + mSelMonth+"月1号周" + weekNumber);
+		Log.d("DateView", "DateView:" + mSelMonth+" month week " + weekNumber );
 		for(int day = 0;day < mMonthDays;day++){
 			dayString = (day + 1) + "";
 			int column = (day+weekNumber - 1) % 7;
@@ -69,22 +69,23 @@ public class MonthDateView extends View {
 			int startX = (int) (mColumnSize * column + (mColumnSize - mPaint.measureText(dayString))/2);
 			int startY = (int) (mRowSize * row + mRowSize/2 - (mPaint.ascent() + mPaint.descent())/2);
 			if(dayString.equals(mSelDay+"")){
-				//绘制背景色矩形
+				//draw the background triangle
 				int startRecX = mColumnSize * column;
 				int startRecY = mRowSize * row;
 				int endRecX = startRecX + mColumnSize;
 				int endRecY = startRecY + mRowSize;
 				mPaint.setColor(mSelectBGColor);
 				canvas.drawRect(startRecX, startRecY, endRecX, endRecY, mPaint);
-				//记录第几行，即第几周
+				//keep track of rows, which week
 				weekRow = row + 1;
 			}
-			//绘制事务圆形标志
+			//draw circle
 			drawCircle(row,column,day + 1,canvas);
 			if(dayString.equals(mSelDay+"")){
 				mPaint.setColor(mSelectDayColor);
 			}else if(dayString.equals(mCurrDay+"") && mCurrDay != mSelDay && mCurrMonth == mSelMonth){
-				//正常月，选中其他日期，则今日为红色
+
+				//same month, different date than today, then today is red
 				mPaint.setColor(mCurrentColor);
 			}else{
 				mPaint.setColor(mDayColor);
@@ -128,7 +129,7 @@ public class MonthDateView extends View {
 		case MotionEvent.ACTION_UP:
 			int upX = (int) event.getX();
 			int upY = (int) event.getY();
-			if(Math.abs(upX-downX) < 10 && Math.abs(upY - downY) < 10){//点击事件
+			if(Math.abs(upX-downX) < 10 && Math.abs(upY - downY) < 10){//click on the event
 				performClick();
 				doClickAction((upX + downX)/2,(upY + downY)/2);
 			}
@@ -138,7 +139,7 @@ public class MonthDateView extends View {
 	}
 
 	/**
-	 * 初始化列宽行高
+	 * get initial size
 	 */
 	private void initSize(){
 		mColumnSize = getWidth() / NUM_COLUMNS;
@@ -146,7 +147,7 @@ public class MonthDateView extends View {
 	}
 	
 	/**
-	 * 设置年月
+	 * set year and month
 	 * @param year
 	 * @param month
 	 */
@@ -156,7 +157,7 @@ public class MonthDateView extends View {
 		mSelDay = day;
 	}
 	/**
-	 * 执行点击事件
+	 * set the date as selected and perform the event
 	 * @param x
 	 * @param y
 	 */
@@ -165,24 +166,26 @@ public class MonthDateView extends View {
 		int column = x / mColumnSize;
 		setSelectYearMonth(mSelYear,mSelMonth,daysString[row][column]);
 		invalidate();
-		//执行activity发送过来的点击处理事件
+		//perform the click action
 		if(dateClick != null){
 			dateClick.onClickOnDate();
 		}
 	}
 
 	/**
-	 * 左点击，日历向后翻页
+	 * click left, calendar flip backward
 	 */
 	public void onLeftClick(){
 		int year = mSelYear;
 		int month = mSelMonth;
 		int day = mSelDay;
-		if(month == 0){//若果是1月份，则变成12月份
+		if(month == 0){//if is january, change to december
 			year = mSelYear-1;
 			month = 11;
 		}else if(DateUtils.getMonthDays(year, month) == day){
-			//如果当前日期为该月最后一点，当向前推的时候，就需要改变选中的日期
+
+			// if the current date is the last date of the month, change the selected date
+			// when moving forward.
 			month = month-1;
 			day = DateUtils.getMonthDays(year, month);
 		}else{
@@ -193,17 +196,19 @@ public class MonthDateView extends View {
 	}
 	
 	/**
-	 * 右点击，日历向前翻页
+	 *click right , calendar flip forward
 	 */
 	public void onRightClick(){
 		int year = mSelYear;
 		int month = mSelMonth;
 		int day = mSelDay;
-		if(month == 11){//若果是12月份，则变成1月份
+		if(month == 11){//if the month is 12, change to 1
 			year = mSelYear+1;
 			month = 0;
 		}else if(DateUtils.getMonthDays(year, month) == day){
-			//如果当前日期为该月最后一点，当向前推的时候，就需要改变选中的日期
+
+			//if the current date is the last date of the month, change the selected date when
+			//change the page to the calendar.
 			month = month + 1;
 			day = DateUtils.getMonthDays(year, month);
 		}else{
@@ -214,28 +219,28 @@ public class MonthDateView extends View {
 	}
 	
 	/**
-	 * 获取选择的年份
+	 * get selected year
 	 * @return
 	 */
 	public int getmSelYear() {
 		return mSelYear;
 	}
 	/**
-	 * 获取选择的月份
+	 * get selected month
 	 * @return
 	 */
 	public int getmSelMonth() {
 		return mSelMonth;
 	}
 	/**
-	 * 获取选择的日期
+	 * get selected day
 	 * @param mSelDay
 	 */
 	public int getmSelDay() {
 		return this.mSelDay;
 	}
 	/**
-	 * 普通日期的字体颜色，默认黑色
+	 * dates color is black
 	 * @param mDayColor
 	 */
 	public void setmDayColor(int mDayColor) {
@@ -243,7 +248,7 @@ public class MonthDateView extends View {
 	}
 	
 	/**
-	 * 选择日期的颜色，默认为白色
+	 * set selected date color to white
 	 * @param mSelectDayColor
 	 */
 	public void setmSelectDayColor(int mSelectDayColor) {
@@ -251,14 +256,14 @@ public class MonthDateView extends View {
 	}
 
 	/**
-	 * 选中日期的背景颜色，默认蓝色
+	 *back ground of selected date is blue
 	 * @param mSelectBGColor
 	 */
 	public void setmSelectBGColor(int mSelectBGColor) {
 		this.mSelectBGColor = mSelectBGColor;
 	}
 	/**
-	 * 当前日期不是选中的颜色，默认红色
+	 * not selected, color is red
 	 * @param mCurrentColor
 	 */
 	public void setmCurrentColor(int mCurrentColor) {
@@ -266,18 +271,18 @@ public class MonthDateView extends View {
 	}
 
 	/**
-	 * 日期的大小，默认18sp
+	 * size of date
 	 * @param mDaySize
 	 */
 	public void setmDaySize(int mDaySize) {
 		this.mDaySize = mDaySize;
 	}
 	/**
-	 * 设置显示当前日期的控件
+	 * show current date
 	 * @param tv_date
-	 * 		显示日期
+	 * 		show day
 	 * @param tv_week
-	 * 		显示周
+	 * 		show week
 	 */
 	public void setTextView(TextView tv_date,TextView tv_week){
 		this.tv_date = tv_date;
@@ -286,7 +291,7 @@ public class MonthDateView extends View {
 	}
 
 	/**
-	 * 设置事务天数
+	 * set how may days has events
 	 * @param daysHasThingList
 	 */
 	public void setDaysHasThingList(List<Integer> daysHasThingList) {
@@ -294,7 +299,7 @@ public class MonthDateView extends View {
 	}
 
 	/***
-	 * 设置圆圈的半径，默认为6
+	 * set radius
 	 * @param mCircleRadius
 	 */
 	public void setmCircleRadius(int mCircleRadius) {
@@ -302,7 +307,7 @@ public class MonthDateView extends View {
 	}
 	
 	/**
-	 * 设置圆圈的半径
+	 * set radius color
 	 * @param mCircleColor
 	 */
 	public void setmCircleColor(int mCircleColor) {
@@ -310,7 +315,7 @@ public class MonthDateView extends View {
 	}
 	
 	/**
-	 * 设置日期的点击回调事件
+	 * click on the date
 	 * @author shiwei.deng
 	 *
 	 */
@@ -319,7 +324,7 @@ public class MonthDateView extends View {
 	}
 
 	/**
-	 * 设置日期点击事件
+	 * click on date
 	 * @param dateClick
 	 */
 	public void setDateClick(DateClick dateClick) {
@@ -327,7 +332,7 @@ public class MonthDateView extends View {
 	}
 	
 	/**
-	 * 跳转至今天
+	 * change back to today
 	 */
 	public void setTodayToView(){
 		setSelectYearMonth(mCurrYear,mCurrMonth,mCurrDay);
